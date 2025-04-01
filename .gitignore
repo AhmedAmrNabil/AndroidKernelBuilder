@@ -3,3 +3,4 @@ magiskboot_x86
 kernel_samsung_ascendia_sm7325/
 toolchain/
 build/a52s
+.secrets

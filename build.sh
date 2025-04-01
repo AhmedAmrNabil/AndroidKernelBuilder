@@ -31,7 +31,7 @@ TC_DIR=$(pwd)/toolchain
 SRC_DIR=$(pwd)/kernel_samsung_ascendia_sm7325
 OUT_DIR=$(pwd)/build
 MAIN_DIR=$(pwd)
-JOBS=$(nproc --all)
+JOBS=4
 
 KSU_VER=$(git -C $SRC_DIR/KernelSU-Next describe --tags | head -n 1)
 
@@ -251,25 +251,25 @@ PACK_VENDOR_BOOT_IMG
 # Building for china and korean versions
 # WARINING: Untested
 
-# a52sxqks
-IMG_FOLDER=kor
-VARIANT=a52sxqks
-DEFCONFIG=a52sxq_kor_single_defconfig
-RP_REV=SRPUF22A001
-BUILD_KERNEL
-PACK_BOOT_IMG
-PACK_DTBO_IMG
-PACK_VENDOR_BOOT_IMG
+# # a52sxqks
+# IMG_FOLDER=kor
+# VARIANT=a52sxqks
+# DEFCONFIG=a52sxq_kor_single_defconfig
+# RP_REV=SRPUF22A001
+# BUILD_KERNEL
+# PACK_BOOT_IMG
+# PACK_DTBO_IMG
+# PACK_VENDOR_BOOT_IMG
 
-# a52sxqzt
-IMG_FOLDER=chn
-VARIANT=a52sxqzt
-DEFCONFIG=a52sxq_chn_tw_defconfig
-RP_REV=SRPUE26A001
-BUILD_KERNEL
-PACK_BOOT_IMG
-PACK_DTBO_IMG
-PACK_VENDOR_BOOT_IMG
+# # a52sxqzt
+# IMG_FOLDER=chn
+# VARIANT=a52sxqzt
+# DEFCONFIG=a52sxq_chn_tw_defconfig
+# RP_REV=SRPUE26A001
+# BUILD_KERNEL
+# PACK_BOOT_IMG
+# PACK_DTBO_IMG
+# PACK_VENDOR_BOOT_IMG
 
 MAKE_INSTALLER
 

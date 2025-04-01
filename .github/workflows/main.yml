@@ -17,10 +17,10 @@ jobs:
           ./download-deps.sh
 
       - name: Cache toolchain
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
-          path: toolchain
-          key: ${{ runner.os }}-build-${{ hashFiles('download-deps.sh') }}
+          path: ./toolchain
+          key: ${{ runner.os }}-toolchain-${{ hashFiles('download-deps.sh') }}-${{ hashFiles('toolchain/**/*') }}
 
       - name: Clone kernel repository
         run: |
@@ -31,7 +31,7 @@ jobs:
         run: |
           sudo apt update && sudo apt upgrade -y
           DEBIAN_FRONTEND=noninteractive sudo apt update && sudo apt install -y git device-tree-compiler lz4 xz-utils zlib1g-dev openjdk-17-jdk gcc g++ python3 python-is-python3 p7zip-full android-sdk-libsparse-utils erofs-utils \
-          default-jdk git gnupg flex bison gperf build-essential zip curl libc6-dev libncurses-dev libx11-dev libreadline-dev libgl1 libgl1-mesa-dev \
+          default-jdk git gnupg flex bison ccache gperf build-essential zip curl libc6-dev libncurses-dev libx11-dev libreadline-dev libgl1 libgl1-mesa-dev \
           python3 make sudo gcc g++ bc grep tofrodos python3-markdown libxml2-utils xsltproc zlib1g-dev python-is-python3 libc6-dev libtinfo6 \
           make repo cpio kmod openssl libelf-dev pahole libssl-dev libarchive-tools zstd --fix-missing && wget http://security.ubuntu.com/ubuntu/pool/universe/n/ncurses/libtinfo5_6.3-2ubuntu0.1_amd64.deb && sudo dpkg -i libtinfo5_6.3-2ubuntu0.1_amd64.deb
           

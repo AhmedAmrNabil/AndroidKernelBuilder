@@ -63,3 +63,8 @@ else
 fi
 
 echo "----------------------------------------------"
+echo "Unzipping images and zip template"
+unzip a52s.zip
+unzip zip-template.zip
+
+echo "----------------------------------------------"

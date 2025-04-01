@@ -31,7 +31,7 @@ TC_DIR=$(pwd)/toolchain
 SRC_DIR=$(pwd)/kernel_samsung_ascendia_sm7325
 OUT_DIR=$(pwd)/build
 MAIN_DIR=$(pwd)
-JOBS=2
+JOBS=1
 
 KSU_VER=$(git -C $SRC_DIR/KernelSU-Next describe --tags | head -n 1)
 

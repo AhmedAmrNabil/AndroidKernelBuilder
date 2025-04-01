@@ -1,0 +1,46 @@
+name: Build and Release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run dependency script
+        run: |
+          chmod +x download-deps.sh
+          ./download-deps.sh
+
+      - name: Clone kernel repository
+        run: |
+          git clone --depth 1 --branch aosp-ksu --recurse-submodules https://github.com/AhmedAmrNabil/kernel_samsung_ascendia_sm7325.git
+
+      - name: Run build script
+        run: |
+          chmod +x build.sh
+          ./build.sh
+
+      - name: Find built file
+        id: find_artifact
+        run: |
+          ARTIFACT=$(ls build/Builds/ | head -n 1)
+          echo "ARTIFACT=$ARTIFACT" >> $GITHUB_ENV
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.ARTIFACT }}
+          path: build/Builds/${{ env.ARTIFACT }}
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.run_id }}
+          files: build/Builds/${{ env.ARTIFACT }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

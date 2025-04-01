@@ -20,9 +20,6 @@ jobs:
         uses: actions/cache@v3
         with:
           path: toolchain
-          key: toolchain-${{ runner.os }}-${{ hashFiles('**/download-deps.sh') }}
-          restore-keys: |
-            toolchain-${{ runner.os }}-
 
       - name: Clone kernel repository
         run: |

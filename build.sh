@@ -31,7 +31,7 @@ TC_DIR=$(pwd)/toolchain
 SRC_DIR=$(pwd)/kernel_samsung_ascendia_sm7325
 OUT_DIR=$(pwd)/build
 MAIN_DIR=$(pwd)
-JOBS=1
+JOBS=$(nproc --all)
 
 KSU_VER=$(git -C $SRC_DIR/KernelSU-Next describe --tags | head -n 1)
 
@@ -75,7 +75,7 @@ CLEAN_SOURCE()
 BUILD_KERNEL()
 {
 	echo "----------------------------------------------"
-	[ -d "$SRC_DIR/out" ] && echo "Starting $VARIANT kernel build... (DIRTY)" || echo "Starting $VARIANT kernel build..."
+	[ -d "$SRC_DIR/out" ] && echo "Starting $VARIANT kernel build using $JOBS jobs... (DIRTY)" || echo "Starting $VARIANT kernel build..."
 	echo " "
 	export LOCALVERSION="-$ANDROID_CODENAME-$RELEASE_VERSION-$KSU_VER-$ASC_VAR-$VARIANT"
 	mkdir -p $SRC_DIR/out

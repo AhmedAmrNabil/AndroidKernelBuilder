@@ -16,7 +16,6 @@ jobs:
         with:
           path: ./toolchain
           key: ${{ runner.os }}-toolchain-${{ hashFiles('download-deps.sh') }}-${{ hashFiles('toolchain/**/*') }}
-          save-always: true
           restore-keys: |
             ${{ runner.os }}-toolchain-${{ hashFiles('download-deps.sh') }}-
             ${{ runner.os }}-toolchain-

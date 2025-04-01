@@ -11,6 +11,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Cache toolchain
+        uses: actions/cache@v3
+        with:
+          path: toolchain
+          key: toolchain-${{ runner.os }}-${{ hashFiles('**/download-deps.sh') }}
+          restore-keys: |
+            toolchain-${{ runner.os }}-
+
       - name: Run dependency script
         run: |
           chmod +x download-deps.sh
@@ -19,9 +27,23 @@ jobs:
       - name: Clone kernel repository
         run: |
           git clone --depth 1 --branch aosp-ksu --recurse-submodules https://github.com/AhmedAmrNabil/kernel_samsung_ascendia_sm7325.git
+      
+      
+      - name: Set up build environment
+        run: |
+          sudo apt update && sudo apt upgrade -y
+          DEBIAN_FRONTEND=noninteractive sudo apt install -yq \
+              attr ccache cpio clang golang linux-modules-extra-$(uname -r) \
+              libbrotli-dev libgtest-dev libprotobuf-dev libunwind-dev libusb-1.0-0-dev libzstd-dev \
+              build-essential lld cmake llvm ninja-build protobuf-compiler f2fs-tools zipalign \
+              gcc-aarch64-linux-gnu libc6-dev libfmt-dev libarchive-tools bc flex bison p7zip-full \
+              libncurses5-dev lzop python3 zip unzip bsdiff python3-pip
+          sudo modprobe f2fs
 
+          
       - name: Run build script
         run: |
+          export TERM=xterm
           chmod +x build.sh
           ./build.sh
 

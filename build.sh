@@ -214,7 +214,7 @@ PACK_VENDOR_BOOT_IMG()
 MAKE_INSTALLER()
 {
 	cp $OUT_DIR/a52s/update-binary $OUT_DIR/out/zip/META-INF/com/google/android/update-binary
-	cp $OUT_DIR/a52s/update-script $OUT_DIR/out/zip/META-INF/com/google/android/update-script
+	cp $OUT_DIR/a52s/updater-script $OUT_DIR/out/zip/META-INF/com/google/android/updater-script
 	sed -i -e "s/ksu_version/$KSU_VER/g" $OUT_DIR/out/zip/META-INF/com/google/android/update-binary
 	sed -i "s/build_date/$DATE/g" $OUT_DIR/out/zip/META-INF/com/google/android/update-binary
 	cd $OUT_DIR/out/zip/

@@ -10,6 +10,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        
+      - name: Run dependency script
+        run: |
+          chmod +x download-deps.sh
+          ./download-deps.sh
 
       - name: Cache toolchain
         uses: actions/cache@v3
@@ -18,11 +23,6 @@ jobs:
           key: toolchain-${{ runner.os }}-${{ hashFiles('**/download-deps.sh') }}
           restore-keys: |
             toolchain-${{ runner.os }}-
-
-      - name: Run dependency script
-        run: |
-          chmod +x download-deps.sh
-          ./download-deps.sh
 
       - name: Clone kernel repository
         run: |

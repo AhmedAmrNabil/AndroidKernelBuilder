@@ -20,6 +20,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: toolchain
+          key: ${{ runner.os }}-build-${{ hashFiles('download-deps.sh') }}
 
       - name: Clone kernel repository
         run: |

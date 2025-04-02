@@ -75,11 +75,11 @@ CLEAN_SOURCE()
 BUILD_KERNEL()
 {
 	echo "----------------------------------------------"
-	[ -d "$SRC_DIR/out" ] && echo "Starting $VARIANT kernel build using $JOBS jobs... (DIRTY)" || echo "Starting $VARIANT kernel build..."
+	[ -d "$SRC_DIR/out" ] && echo "Starting $VARIANT kernel build using $JOBS jobs... (DIRTY)" || echo "Starting $VARIANT kernel build using $JOBS jobs..."
 	echo " "
 	export LOCALVERSION="-$ANDROID_CODENAME-$RELEASE_VERSION-$KSU_VER-$ASC_VAR-$VARIANT"
-	mkdir -p $SRC_DIR/out
-	rm -rf $SRC_DIR/out/arch/arm64/boot/dts/samsung
+	mkdir -p "$SRC_DIR/out"
+	rm -rf "$SRC_DIR/out/arch/arm64/boot/dts/samsung"
 	make $MAKE_PARAMS CC="ccache clang" vendor/$DEFCONFIG
 	echo " "
 	# Regen defconfig
@@ -178,18 +178,18 @@ PACK_DTBO_IMG()
 	echo "Packing $VARIANT dtbo.img..."
 	# Uncomment this to use firmware extracted dtbo
 	#cp $OUT_DIR/a52s/$IMG_FOLDER/dtbo.img $OUT_DIR/out/zip/mesa/$IMG_FOLDER/dtbo.img
-	cp $SRC_DIR/out/arch/arm64/boot/dtbo.img $OUT_DIR/out/zip/mesa/$IMG_FOLDER/dtbo.img
+	cp "$SRC_DIR/out/arch/arm64/boot/dtbo.img" "$OUT_DIR/out/zip/mesa/$IMG_FOLDER/dtbo.img"
 }
 
 PACK_VENDOR_BOOT_IMG()
 {
 	echo "----------------------------------------------"
 	echo "Packing $VARIANT vendor_boot.img..."
-	rm -rf $OUT_DIR/tmp/
-	mkdir $OUT_DIR/tmp/
+	rm -rf "$OUT_DIR/tmp/"
+	mkdir "$OUT_DIR/tmp/"
 	# Copy and unpack stock vendor_boot.img
-	cp $OUT_DIR/a52s/$IMG_FOLDER/vendor_boot.img $OUT_DIR/tmp/vendor_boot.img
-	cd $OUT_DIR/tmp/
+	cp "$OUT_DIR/a52s/$IMG_FOLDER/vendor_boot.img" "$OUT_DIR/tmp/vendor_boot.img"
+	cd "$OUT_DIR/tmp/"
 	avbtool erase_footer --image vendor_boot.img
 	magiskboot_x86 unpack -h vendor_boot.img
 	# Replace KernelRPValue
@@ -197,18 +197,18 @@ PACK_VENDOR_BOOT_IMG()
 	rm -f header
 	mv header_new header
 	# Replace stock DTB
-	rm -f $OUT_DIR/tmp/dtb
-	cp $SRC_DIR/out/arch/arm64/boot/dts/vendor/qcom/yupik.dtb $OUT_DIR/tmp/dtb
+	rm -f "$OUT_DIR/tmp/dtb"
+	cp "$SRC_DIR/out/arch/arm64/boot/dts/vendor/qcom/yupik.dtb" "$OUT_DIR/tmp/dtb"
 	# SELinux permissive
 	#CMDLINE=$(cat $OUT_DIR/tmp/split_img/vendor_boot.img-vendor_cmdline)
 	#CMDLINE+=" androidboot.selinux=permissive"
 	#echo $CMDLINE > $OUT_DIR/tmp/split_img/vendor_boot.img-vendor_cmdline
 	# Repack and copy in out folder
 	magiskboot_x86 repack vendor_boot.img vendor_boot_new.img
-	mv $OUT_DIR/tmp/vendor_boot_new.img $OUT_DIR/out/zip/mesa/$IMG_FOLDER/vendor_boot.img
+	mv "$OUT_DIR/tmp/vendor_boot_new.img" "$OUT_DIR/out/zip/mesa/$IMG_FOLDER/vendor_boot.img"
 	# Clean :3
-	rm -rf $OUT_DIR/tmp/
-	cd $MAIN_DIR/
+	rm -rf "$OUT_DIR/tmp/"
+	cd "$MAIN_DIR/"
 }
 
 MAKE_INSTALLER()
@@ -217,22 +217,22 @@ MAKE_INSTALLER()
 	cp $OUT_DIR/a52s/updater-script $OUT_DIR/out/zip/META-INF/com/google/android/updater-script
 	sed -i -e "s/ksu_version/$KSU_VER/g" $OUT_DIR/out/zip/META-INF/com/google/android/update-binary
 	sed -i "s/build_date/$DATE/g" $OUT_DIR/out/zip/META-INF/com/google/android/update-binary
-	cd $OUT_DIR/out/zip/
-	zip -r $OUT_DIR/Builds/${RELEASE_VERSION}_${KSU_VER}_${ASC_VARIANT}_a52sxq.zip mesa META-INF
+	cd "$OUT_DIR/out/zip/"
+	zip -r "$OUT_DIR/Builds/${RELEASE_VERSION}_${KSU_VER}_${ASC_VARIANT}_a52sxq.zip" mesa META-INF
 }
 
 # Do stuff
 clear
 
-rm -rf $OUT_DIR/out
-rm -f $OUT_DIR/tmp/*.img
-
-mkdir -p $OUT_DIR/out
-cp -r $OUT_DIR/zip-template $OUT_DIR/out/zip
-mkdir -p $OUT_DIR/out/zip/mesa/eur
-mkdir -p $OUT_DIR/out/zip/mesa/chn
-mkdir -p $OUT_DIR/out/zip/mesa/kor
-mkdir -p $OUT_DIR/Builds/
+rm -rf "$OUT_DIR/out"
+rm -f "$OUT_DIR/tmp/*.img
+"
+mkdir -p "$OUT_DIR/out"
+cp -r "$OUT_DIR/zip-template" "$OUT_DIR/out/zip"
+mkdir -p "$OUT_DIR/out/zip/mesa/eur"
+mkdir -p "$OUT_DIR/out/zip/mesa/chn"
+mkdir -p "$OUT_DIR/out/zip/mesa/kor"
+mkdir -p "$OUT_DIR/Builds/"
 
 # a52sxqxx
 IMG_FOLDER=eur
@@ -242,10 +242,15 @@ RP_REV=SRPUE26A001
 if [[ $1 = "-c" || $1 = "--clean" ]]; then
 	CLEAN_SOURCE
 fi
+
 DETECT_BRANCH
+
 BUILD_KERNEL
+
 PACK_BOOT_IMG
+
 PACK_DTBO_IMG
+
 PACK_VENDOR_BOOT_IMG
 
 # Building for china and korean versions

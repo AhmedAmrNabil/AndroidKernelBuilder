@@ -225,14 +225,18 @@ MAKE_INSTALLER()
 clear
 
 rm -rf "$OUT_DIR/out"
-rm -f "$OUT_DIR/tmp/*.img
-"
+rm -f "$OUT_DIR/tmp/*.img"
+
 mkdir -p "$OUT_DIR/out"
-cp -r "$OUT_DIR/zip-template" "$OUT_DIR/out/zip"
+mkdir -p "$OUT_DIR/out/zip/META-INF/com/google/android"
 mkdir -p "$OUT_DIR/out/zip/mesa/eur"
-mkdir -p "$OUT_DIR/out/zip/mesa/chn"
-mkdir -p "$OUT_DIR/out/zip/mesa/kor"
 mkdir -p "$OUT_DIR/Builds/"
+
+# Unzipping stock boot.img
+
+echo "----------------------------------------------"
+echo "Unzipping images..."
+unzip $OUT_DIR/a52s/images.zip -d $OUT_DIR/a52s/
 
 # a52sxqxx
 IMG_FOLDER=eur
@@ -252,29 +256,6 @@ PACK_BOOT_IMG
 PACK_DTBO_IMG
 
 PACK_VENDOR_BOOT_IMG
-
-# Building for china and korean versions
-# WARINING: Untested
-
-# # a52sxqks
-# IMG_FOLDER=kor
-# VARIANT=a52sxqks
-# DEFCONFIG=a52sxq_kor_single_defconfig
-# RP_REV=SRPUF22A001
-# BUILD_KERNEL
-# PACK_BOOT_IMG
-# PACK_DTBO_IMG
-# PACK_VENDOR_BOOT_IMG
-
-# # a52sxqzt
-# IMG_FOLDER=chn
-# VARIANT=a52sxqzt
-# DEFCONFIG=a52sxq_chn_tw_defconfig
-# RP_REV=SRPUE26A001
-# BUILD_KERNEL
-# PACK_BOOT_IMG
-# PACK_DTBO_IMG
-# PACK_VENDOR_BOOT_IMG
 
 MAKE_INSTALLER
 

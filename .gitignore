@@ -2,5 +2,9 @@ avbtool
 magiskboot_x86
 kernel_samsung_ascendia_sm7325/
 toolchain/
-build/a52s
+build/a52s/*
+build/Builds
+!build/a52s/update-binary
+!build/a52s/updater-script
+!build/a52s/images.zip
 .secrets

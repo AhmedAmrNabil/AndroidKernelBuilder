@@ -7,4 +7,5 @@ build/Builds
 !build/a52s/update-binary
 !build/a52s/updater-script
 !build/a52s/images.zip
+toolchain
 .secrets

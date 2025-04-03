@@ -24,6 +24,8 @@ set -e
 DATE=`date +%Y-%m-%d`
 ANDROID_CODENAME="U"
 RELEASE_VERSION="btngana"
+BUILD_FP="samsung/a52sxqxx/a52sxq:11/RP1A.200720.012/A528BXXUAGXK8:user/release-keys"
+
 # Clang 11 r383902b1 is suggested
 TC_DIR=$(pwd)/toolchain
 
@@ -77,7 +79,7 @@ BUILD_KERNEL()
 	echo "----------------------------------------------"
 	[ -d "$SRC_DIR/out" ] && echo "Starting $VARIANT kernel build using $JOBS jobs... (DIRTY)" || echo "Starting $VARIANT kernel build using $JOBS jobs..."
 	echo " "
-	export LOCALVERSION="-$ANDROID_CODENAME-$RELEASE_VERSION-$KSU_VER-$ASC_VAR-$VARIANT"
+	export LOCALVERSION="-$ANDROID_CODENAME-$RELEASE_VERSION-$KSU_VER-$ASC_VARIANT-$VARIANT"
 	mkdir -p "$SRC_DIR/out"
 	rm -rf "$SRC_DIR/out/arch/arm64/boot/dts/samsung"
 	make $MAKE_PARAMS CC="ccache clang" vendor/$DEFCONFIG
@@ -215,8 +217,13 @@ MAKE_INSTALLER()
 {
 	cp $OUT_DIR/a52s/update-binary $OUT_DIR/out/zip/META-INF/com/google/android/update-binary
 	cp $OUT_DIR/a52s/updater-script $OUT_DIR/out/zip/META-INF/com/google/android/updater-script
-	sed -i -e "s/ksu_version/$KSU_VER/g" $OUT_DIR/out/zip/META-INF/com/google/android/update-binary
-	sed -i "s/build_date/$DATE/g" $OUT_DIR/out/zip/META-INF/com/google/android/update-binary
+	
+	sed -i -e "s/ksu_version/$KSU_VER/g" \
+       -e "s/build_date/$DATE/g" \
+       -e "s/build_var/$ASC_VARIANT/g" \
+       -e "s/build_fp/$BUILD_FP/g" \
+       $OUT_DIR/out/zip/META-INF/com/google/android/update-binary
+	
 	cd "$OUT_DIR/out/zip/"
 	zip -r "$OUT_DIR/Builds/${RELEASE_VERSION}_${KSU_VER}_${ASC_VARIANT}_a52sxq.zip" mesa META-INF
 }
@@ -227,22 +234,26 @@ clear
 rm -rf "$OUT_DIR/out"
 rm -f "$OUT_DIR/tmp/*.img"
 
+# Check for dependencies
+./download-deps.sh "$TC_DIR"
+
 mkdir -p "$OUT_DIR/out"
 mkdir -p "$OUT_DIR/out/zip/META-INF/com/google/android"
 mkdir -p "$OUT_DIR/out/zip/mesa/eur"
 mkdir -p "$OUT_DIR/Builds/"
 
-# Unzipping stock boot.img
 
+# Unzipping stock boot.img
 echo "----------------------------------------------"
 echo "Unzipping images..."
 unzip $OUT_DIR/a52s/images.zip -d $OUT_DIR/a52s/
 
 # a52sxqxx
-IMG_FOLDER=eur
-VARIANT=a52sxqxx
-DEFCONFIG=a52sxq_eur_open_defconfig
-RP_REV=SRPUE26A001
+IMG_FOLDER="eur"
+VARIANT="a52sxqxx"
+DEFCONFIG="a52sxq_eur_open_defconfig"
+RP_REV="SRPUE26A001"
+
 if [[ $1 = "-c" || $1 = "--clean" ]]; then
 	CLEAN_SOURCE
 fi

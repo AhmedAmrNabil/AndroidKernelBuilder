@@ -20,6 +20,8 @@ TC_URL=https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/
 AVB_URL=https://android.googlesource.com/platform/external/avb/+archive/refs/heads/main.tar.gz
 MAGISK_URL=$(curl -s https://api.github.com/repos/topjohnwu/Magisk/releases/latest | jq -r '.assets[] | select(.name | test("Magisk.*.apk$")) | .browser_download_url')
 
+TC_DIR="$1"
+
 # Download avbtool:
 echo "----------------------------------------------"
 if [ ! -f avbtool ]; then
@@ -52,11 +54,11 @@ fi
 
 # Download toolchain
 echo "----------------------------------------------"
-if [ ! -d toolchain ]; then
+if [ ! -d "$TC_DIR" ]; then
 	echo "Downloading clang toolchain..."
 	curl -L "$TC_URL" -o toolchain.tar.gz
-	mkdir toolchain
-	tar -xzf toolchain.tar.gz -C toolchain
+	mkdir "$TC_DIR"
+	tar -xzf toolchain.tar.gz -C "$TC_DIR"
 	rm -rf toolchain.tar.gz
 else
 	echo "Clang toolchain found, Skipping..."

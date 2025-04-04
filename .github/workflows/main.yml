@@ -61,7 +61,6 @@ jobs:
       - name: Run build script
         run: |
           export TERM=xterm
-          export KSU_VER=$(git -C kernel_samsung_ascendia_sm7325/KernelSU-Next describe --tags --abbrev=0 | head -n 1) >> $GITHUB_ENV
           chmod +x build.sh
           ./build.sh -c
 
@@ -69,7 +68,9 @@ jobs:
         id: find_artifact
         run: |
           ARTIFACT=$(ls build/Builds/ | head -n 1)
+          KSU_VER=$(git -C kernel_samsung_ascendia_sm7325/KernelSU-Next describe --tags --abbrev=0 | head -n 1)
           echo "ARTIFACT=$ARTIFACT" >> $GITHUB_ENV
+          echo "KSU_VER=$KSU_VER" >> $GITHUB_ENV
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4

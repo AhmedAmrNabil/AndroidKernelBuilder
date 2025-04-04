@@ -63,7 +63,7 @@ jobs:
           export TERM=xterm
           export KSU_VER=$(git -C kernel_samsung_ascendia_sm7325/KernelSU-Next describe --tags --abbrev=0 | head -n 1)
           chmod +x build.sh
-          ./build.sh
+          ./build.sh -c
 
       - name: Find built file
         id: find_artifact
